@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -51,8 +52,10 @@ class MainActivity : ComponentActivity() {
             action = StratagemService.Actions.START.toString()
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d("MainActivity", "Starting Foreground Service")
             startForegroundService(intent)
         } else {
+            Log.d("MainActivity", "Starting Regular Service")
             startService(intent)
         }
     }

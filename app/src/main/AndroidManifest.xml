@@ -33,6 +33,20 @@
             android:name=".domain.service.StratagemService"
             android:label="Stratagem service"
             android:foregroundServiceType="specialUse" />
+
+        <receiver
+            android:name=".widget.StratagemReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/stratagem_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>
