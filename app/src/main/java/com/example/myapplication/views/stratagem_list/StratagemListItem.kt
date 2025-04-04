@@ -23,23 +23,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.domain.model.Stratagem
 import com.example.myapplication.R
+import com.example.myapplication.utils.BitmapUtils
 
 @Composable
 fun StratagemListItem(
     stratagem: Stratagem,
     onClick: (Stratagem) -> Unit
 ) {
-    val context = LocalContext.current
-    val formattedName = stratagem.name
-        .lowercase()
-        .replace(" ", "_")
-        .replace("-", "_")
-        .replace("\"", "")
-    val resourceId: Int = try {
-        context.resources.getIdentifier(formattedName, "drawable", context.packageName)
-    } catch (e: Exception) {
-        0
-    }
+    val resourceId = BitmapUtils.getResourceId(LocalContext.current, stratagem.name)
 
     Column(
         modifier = Modifier

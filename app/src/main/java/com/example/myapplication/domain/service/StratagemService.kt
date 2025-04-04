@@ -1,103 +1,97 @@
 package com.example.myapplication.domain.service
 
 import android.app.Service
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
+import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
+import androidx.glance.appwidget.updateAll
 import com.example.myapplication.R
+import com.example.myapplication.domain.model.Stratagem
+import com.example.myapplication.persistence.StratagemFileStore
+import com.example.myapplication.utils.BitmapUtils
+import com.example.myapplication.widget.StratagemWidget
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class StratagemService : Service() {
-    private val handler = Handler(Looper.getMainLooper())
-    private lateinit var notificationManager: NotificationManagerCompat
 
-    private var imageIndex: Int = 0
-    private val sharedPreferences: SharedPreferences by lazy {
-        getSharedPreferences("stratagem_preferences", MODE_PRIVATE)
+    private lateinit var stratagemFileStore: StratagemFileStore
+    private lateinit var stratagems: List<Stratagem>
+
+    private var isRunning: Boolean = false
+
+    override fun onCreate() {
+        super.onCreate()
+
+        stratagemFileStore = StratagemFileStore(this)
+        stratagems = try {
+            stratagemFileStore.loadStratagems()
+        } catch (e: Exception) {
+            emptyList<Stratagem>()
+        }
     }
 
-    private val images = listOf(
-        R.drawable.eagle_500kg_bomb,
-        R.drawable.anti_personnel_minefield,
-        R.drawable.orbital_laser
-    )
-
-    override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
-            Actions.START.toString() -> startUpdatingNotifications()
-            Actions.STOP.toString() -> stopSelf()
+            StratagemServiceAction.START.name -> start()
+            StratagemServiceAction.STOP.name -> stop()
         }
-        return START_STICKY
+
+        return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun startUpdatingNotifications() {
-        notificationManager = NotificationManagerCompat.from(this)
+    private fun start() {
+        isRunning = true
+        CoroutineScope(Dispatchers.Default).launch {
+            stratagemFlow().collect { stratagemResourceId ->
+                stratagemFileStore.saveResourceId(stratagemResourceId)
 
-        imageIndex = sharedPreferences.getInt("active_stratagem_index", 0)
-        startForeground(1, createNotification(images[imageIndex]))
+                withContext(Dispatchers.Main) {
+                    StratagemWidget().updateAll(this@StratagemService)
+                }
 
-        handler.post(updateNotificationRunnable)
-    }
-
-    private val updateNotificationRunnable = object : Runnable {
-        override fun run() {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                ContextCompat.checkSelfPermission(this@StratagemService, android.Manifest.permission.POST_NOTIFICATIONS)
-                == PackageManager.PERMISSION_GRANTED
-            ) {
-                imageIndex = (imageIndex + 1) % images.size
-                sharedPreferences.edit().putInt("active_stratagem_index", imageIndex).apply()
-
-                notificationManager.notify(1, createNotification(images[imageIndex]))
-
-                handler.postDelayed(this, 30_000)
+                notification(stratagemResourceId)
             }
         }
     }
 
-    private fun createNotification(imageRes: Int): android.app.Notification {
-        val bitmap = getBitmapFromVectorDrawable(this, imageRes)
+    private fun stratagemFlow(): Flow<Int> = flow {
+        while (isRunning) {
+            if (stratagems.isNotEmpty()) {
+                val stratagem = stratagems.random()
+                val resourceId = BitmapUtils.getResourceId(this@StratagemService, stratagem.name)
 
-        return NotificationCompat.Builder(this, "stratagem_notifications")
+                emit(resourceId)
+            }
+
+            delay(30_000)
+        }
+    }
+
+    private fun notification(stratagemResourceId: Int) {
+        val stratagemNotification = NotificationCompat
+            .Builder(this, "stratagem_channel")
             .setSmallIcon(R.drawable.helldivers_2__icon_)
-            .setContentTitle("Active stratagem")
-            .setContentText("Current active stratagem:")
-            .setLargeIcon(bitmap)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(false)
-            .setOngoing(true)
+            .setContentTitle("Active Stratagem")
+            .setLargeIcon(BitmapUtils.getBitmapFromVectorDrawable(this, stratagemResourceId))
+            .setStyle(NotificationCompat.BigPictureStyle())
             .build()
+
+        startForeground(1, stratagemNotification)
     }
 
-    private fun getBitmapFromVectorDrawable(context: Context, drawableId: Int): Bitmap {
-        val drawable = ContextCompat.getDrawable(context, drawableId)
-            ?: return Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-
-        return bitmap
+    private fun stop() {
+        isRunning = false
+        stopSelf()
     }
 
-    override fun onDestroy() {
-        handler.removeCallbacks(updateNotificationRunnable)
-        super.onDestroy()
-    }
-
-    enum class Actions {
+    enum class StratagemServiceAction {
         START, STOP
     }
 }

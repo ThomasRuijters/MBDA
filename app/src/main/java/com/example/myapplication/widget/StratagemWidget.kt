@@ -1,7 +1,9 @@
 package com.example.myapplication.widget
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -12,37 +14,33 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.layout.Column
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
-import com.example.myapplication.R
+import com.example.myapplication.persistence.StratagemFileStore
+
 
 class StratagemWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val sharedPreferences = context.getSharedPreferences("stratagem_preferences", Context.MODE_PRIVATE)
-        val imageIndex = sharedPreferences.getInt("active_stratagem_index", 0)
+        val resourceId = StratagemFileStore(context).loadResourceId()
 
-        val stratagemImages = listOf(
-            R.drawable.eagle_500kg_bomb,
-            R.drawable.anti_personnel_minefield,
-            R.drawable.orbital_laser
-        )
-
-        val stratagemImage = stratagemImages[imageIndex]
+        // Log the loaded resource ID to ensure it's being updated correctly
+        Log.d("StratagemWidget", "Loaded resource ID: $resourceId")
 
         provideContent {
-            MyContent(stratagemImage)
+            MyContent(resourceId)
         }
     }
 
     @Composable
-    private fun MyContent(stratagemImage: Int) {
-        Column(
-            modifier = GlanceModifier.padding(16.dp)
-        ) {
-            Image(
-                provider = ImageProvider(stratagemImage),
-                contentDescription = "Stratagem Icon",
-                modifier = GlanceModifier.fillMaxWidth()
-            )
+    private fun MyContent(stratagemResourceId: Int) {
+        key(stratagemResourceId) {
+            Column(
+                modifier = GlanceModifier.padding(16.dp)
+            ) {
+                Image(
+                    provider = ImageProvider(resId = stratagemResourceId),
+                    contentDescription = "Stratagem Icon",
+                    modifier = GlanceModifier.fillMaxWidth()
+                )
+            }
         }
     }
-
 }
