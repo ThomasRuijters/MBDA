@@ -1,6 +1,8 @@
 package com.example.myapplication.views.stratagem
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +43,7 @@ fun StratagemScreen(
     onEvent: (StratagemEvent) -> Unit,
     updateTopBar: (String, @Composable () -> Unit) -> Unit
 ) {
-    updateTopBar("New stratagem") {
+    updateTopBar(if (state.id != null) "Edit stratagem" else "New stratagem") {
         if (state.id != null) {
             IconButton(onClick = { onEvent(StratagemEvent.DeleteStratagem) }) {
                 Icon(
@@ -52,49 +55,58 @@ fun StratagemScreen(
         }
     }
 
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE;
     val resourceId = BitmapUtils.getResourceId(LocalContext.current, state.name)
 
-    BoxWithConstraints(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 15.dp)
     ) {
-        val isLandscape = maxWidth > maxHeight
-
         if (isLandscape) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
-                    contentDescription = "Helldivers Icon",
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .size(150.dp)
-                        .align(Alignment.CenterVertically)
-                )
-
-                FormFields(state, onEvent)
-            }
+            HorizontalStratagemScreen(resourceId, state, onEvent)
         } else {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Icon(
-                    painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
-                    contentDescription = "Helldivers Icon",
-                    tint = Color.Unspecified,
-                    modifier = Modifier.size(100.dp)
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                FormFields(state, onEvent)
-            }
+            VerticalStratagemScreen(resourceId, state, onEvent)
         }
+    }
+}
+
+@Composable
+fun VerticalStratagemScreen(resourceId: Int, state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Icon(
+            painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
+            contentDescription = "Helldivers Icon",
+            tint = Color.Unspecified,
+            modifier = Modifier.size(100.dp)
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        FormFields(state, onEvent)
+    }
+}
+
+@Composable
+fun HorizontalStratagemScreen(resourceId: Int, state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
+            contentDescription = "Helldivers Icon",
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .size(150.dp)
+                .align(Alignment.CenterVertically)
+        )
+
+        FormFields(state, onEvent)
     }
 }
 
