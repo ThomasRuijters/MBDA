@@ -50,6 +50,14 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.volley)
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.ui)
+    implementation(libs.material3)
+    //implementation(libs.androidx.activity.compose.v172)
+    //implementation(libs.androidx.datastore.preferences.v100)
+    //implementation(libs.androidx.lifecycle.runtime.ktx.v262)
+
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.lifecycle.service)
