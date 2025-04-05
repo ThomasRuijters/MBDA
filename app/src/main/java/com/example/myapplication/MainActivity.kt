@@ -4,15 +4,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.domain.repository.StratagemRepository
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import android.content.Context
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import com.example.myapplication.utils.SettingsKeys
+import com.example.myapplication.utils.settingsDataStore
+import com.example.myapplication.views.StartScreen
+import kotlinx.coroutines.flow.map
+
 
 class MainActivity : ComponentActivity() {
     private lateinit var stratagemRepository: StratagemRepository
@@ -25,8 +32,27 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyApplicationTheme {
-                Navigation(stratagemRepository = stratagemRepository)
+                Navigation(
+                    stratagemRepository = stratagemRepository,
+                    settingsStore = applicationContext.settingsDataStore
+                )
             }
         }
+    }
+}
+
+@Composable
+fun AppContent(
+    dataStore: DataStore<Preferences>,
+    inner: @Composable () -> Unit
+) {
+    val darkmode = dataStore.data.map {
+        it[SettingsKeys.DARK_MODE] ?: false
+    }.collectAsState(initial = false)
+
+    MaterialTheme(
+        colorScheme = if (darkmode.value) darkColorScheme() else lightColorScheme()
+    ) {
+        inner()
     }
 }
