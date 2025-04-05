@@ -105,19 +105,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-fun AppContent(
-    dataStore: DataStore<Preferences>,
-    inner: @Composable () -> Unit
-) {
-    val darkmode = dataStore.data.map {
-        it[SettingsKeys.DARK_MODE] ?: false
-    }.collectAsState(initial = false)
-
-    MaterialTheme(
-        colorScheme = if (darkmode.value) darkColorScheme() else lightColorScheme()
-    ) {
-        inner()
-    }
-}

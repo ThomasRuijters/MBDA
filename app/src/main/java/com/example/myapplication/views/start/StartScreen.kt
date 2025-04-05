@@ -28,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.content.res.Configuration
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.LocalConfiguration
 import com.example.myapplication.views.settings.VerticalSettingsScreen
 
@@ -63,7 +64,7 @@ fun HorizontalStartScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Image(
             painter = painterResource(id = imageResource),
@@ -76,12 +77,12 @@ fun HorizontalStartScreen(
                 )
         )
 
-        Text("Helldiving from: $townName.", color = Color.White)
+        Text("Helldiving from: $townName.", color = MaterialTheme.colorScheme.onSecondary)
 
         Button(
             onClick = onNext,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.DarkGray
+                containerColor = MaterialTheme.colorScheme.background
             ),
             modifier = modifier
                 .padding(
@@ -90,7 +91,7 @@ fun HorizontalStartScreen(
         ) {
             Text(
                 text = "We dive, $username",
-                color = Color(0xFFffe900)
+                color = MaterialTheme.colorScheme.onSecondary
             )
         }
     }
@@ -113,7 +114,7 @@ fun VerticalStartScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Image(
             painter = painterResource(id = imageResource),
@@ -126,14 +127,14 @@ fun VerticalStartScreen(
                 )
         )
 
-        Text("Helldiving from: $townName.", color = Color.White)
+        Text("Helldiving from: $townName.", color = MaterialTheme.colorScheme.primary)
 
         Spacer(modifier = Modifier.height(200.dp))
 
         Button(
             onClick = onNext,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.DarkGray
+                containerColor = MaterialTheme.colorScheme.primary
             ),
             modifier = modifier
                 .padding(
@@ -143,7 +144,7 @@ fun VerticalStartScreen(
         ) {
             Text(
                 text = "We dive, $username",
-                color = Color(0xFFffe900)
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }

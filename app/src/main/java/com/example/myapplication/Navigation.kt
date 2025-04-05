@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.res.Resources.Theme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -39,6 +41,7 @@ import com.example.myapplication.views.stratagem_list.StratagemListScreen
 import com.example.myapplication.views.stratagem_list.StratagemListViewModel
 import com.example.myapplication.views.stratagem_list.StratagemListViewModelFactory
 import com.example.myapplication.domain.repository.StratagemRepository
+import com.example.myapplication.ui.theme.AppContent
 import com.example.myapplication.utils.UiEvent
 import com.example.myapplication.views.settings.SettingsScreen
 
@@ -67,42 +70,42 @@ fun Navigation(
         }
     }
 
-    Scaffold(
-        containerColor = Color.DarkGray,
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = topBarTitle,
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Yellow
-                        )
-                    )
-                },
-                navigationIcon = {
-                    if (currentRoute != Screen.StartScreen.route && previousRoute != Screen.StartScreen.route) {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = "navigate back",
-                                tint = Color.Yellow
+    AppContent(settingsStore) {
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = topBarTitle,
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary,
                             )
+                        )
+                    },
+                    navigationIcon = {
+                        if (currentRoute != Screen.StartScreen.route && previousRoute != Screen.StartScreen.route) {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.ArrowBack,
+                                    contentDescription = "navigate back",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            }
                         }
-                    }
-                },
-                actions = {
-                    Row {
-                        topBarActions()
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Black)
-            )
-        },
-    ) { innerPadding ->
-        AppContent(settingsStore) {
+                    },
+                    actions = {
+                        Row {
+                            topBarActions()
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                )
+            },
+        ) { innerPadding ->
             NavHost(
                 navController = navController,
                 startDestination = Screen.StartScreen.route,
