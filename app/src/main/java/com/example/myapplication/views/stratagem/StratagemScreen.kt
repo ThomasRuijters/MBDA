@@ -1,6 +1,7 @@
 package com.example.myapplication.views.stratagem
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -21,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -49,7 +51,7 @@ fun StratagemScreen(
                 Icon(
                     imageVector = Icons.Rounded.Delete,
                     contentDescription = "delete",
-                    tint = Color.Red
+                    tint = MaterialTheme.colorScheme.tertiary,
                 )
             }
         }
@@ -74,14 +76,14 @@ fun StratagemScreen(
 @Composable
 fun VerticalStratagemScreen(resourceId: Int, state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
             contentDescription = "Helldivers Icon",
             tint = Color.Unspecified,
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(100.dp).background(Color.Black)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -104,6 +106,7 @@ fun HorizontalStratagemScreen(resourceId: Int, state: StratagemState, onEvent: (
             modifier = Modifier
                 .size(150.dp)
                 .align(Alignment.CenterVertically)
+                .background(Color.Black)
         )
 
         FormFields(state, onEvent)
@@ -136,7 +139,7 @@ fun FormFields(state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow, contentColor = Color.Black),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary),
             shape = RoundedCornerShape(8.dp),
         ) {
             Text("SAVE", fontWeight = FontWeight.Bold)
@@ -152,19 +155,19 @@ fun StratagemTextField(label: String, value: String, onValueChange: (String) -> 
         label = {
             Text(
                 label.uppercase(),
-                color = Color.Yellow
+                color = MaterialTheme.colorScheme.primary,
             )
         },
         modifier = Modifier.fillMaxWidth(),
         textStyle = androidx.compose.ui.text.TextStyle(
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onSecondary,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         ),
         colors = OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = Color.Yellow,
-            focusedBorderColor = Color.White,
-            cursorColor = Color.Yellow
+            unfocusedBorderColor = MaterialTheme.colorScheme.primary,
+            focusedBorderColor = MaterialTheme.colorScheme.onSecondary,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }

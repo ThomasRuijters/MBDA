@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,14 +53,14 @@ fun StratagemListScreen(
             Icon(
                 imageVector = Icons.Rounded.Add,
                 contentDescription = "Add",
-                tint = Color.Yellow
+                tint = MaterialTheme.colorScheme.primary
             )
         }
         IconButton(onClick = onSettingsClick) {
             Icon(
                 imageVector = Icons.Rounded.Settings,
                 contentDescription = "Settings",
-                tint = Color.Red
+                tint = MaterialTheme.colorScheme.tertiary
             )
         }
     }
@@ -87,7 +88,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(MaterialTheme.colorScheme.secondary),
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -112,7 +113,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
         Text(
             text = stringResource(R.string.loading_failed),
             modifier = Modifier.padding(16.dp),
-            style = TextStyle(color = Color.Yellow, fontWeight = FontWeight.Bold)
+            style = TextStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
         )
     }
 }

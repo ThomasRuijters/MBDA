@@ -36,7 +36,7 @@ fun StratagemListItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick(stratagem) }
-            .background(Color.Black, shape = RectangleShape)
+            .background(MaterialTheme.colorScheme.background, shape = RectangleShape)
             .height(200.dp)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -61,7 +61,7 @@ fun StratagemListItem(
             text = stratagem.name,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            color = Color.Yellow,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .padding(top = 8.dp)
                 .fillMaxWidth()

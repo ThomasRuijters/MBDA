@@ -9,50 +9,62 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.example.myapplication.utils.SettingsKeys
+import kotlinx.coroutines.flow.map
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    background = Color(0xFF1C1C1C),
+    primary = Color(0xFFFFEB3B),
+    secondary = Color(0xFF232323),
+    onPrimary = Color.Black,
+    onSecondary = Color.White,
+    tertiary = Color(0xFFD32F2F),
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    background = Color(0xFFE0E0E0),
+    primary = Color(0xFF3B3B3B),
+    secondary = Color.White,
+    onPrimary = Color(0xFFFFEB3B),
+    onSecondary = Color.Black,
+    tertiary = Color(0xFFD32F2F),
 )
 
 @Composable
 fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colors = if (!darkTheme) {
+        LightColorScheme
+    } else {
+        DarkColorScheme
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
+        colorScheme = colors,
         content = content
+    )
+}
+
+@Composable
+fun AppContent(
+    dataStore: DataStore<Preferences>,
+    inner: @Composable () -> Unit
+) {
+    val darkMode = dataStore.data
+        .map { it[SettingsKeys.DARK_MODE] ?: false }
+        .collectAsState(initial = false)
+
+    MaterialTheme(
+        colorScheme = if (darkMode.value) DarkColorScheme else LightColorScheme,
+        typography = Typography,
+        content = inner
     )
 }
