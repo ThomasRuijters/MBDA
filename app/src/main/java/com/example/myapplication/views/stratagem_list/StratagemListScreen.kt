@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,6 +42,7 @@ fun StratagemListScreen(
     viewModel: StratagemListViewModel,
     onStratagemClick: (Stratagem) -> Unit,
     onAddStratagemClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     updateTopBar: (String, @Composable () -> Unit) -> Unit
 ) {
     updateTopBar(
@@ -51,6 +53,13 @@ fun StratagemListScreen(
                 imageVector = Icons.Rounded.Add,
                 contentDescription = "Add",
                 tint = Color.Yellow
+            )
+        }
+        IconButton(onClick = onSettingsClick) {
+            Icon(
+                imageVector = Icons.Rounded.Settings,
+                contentDescription = "Settings",
+                tint = Color.Red
             )
         }
     }

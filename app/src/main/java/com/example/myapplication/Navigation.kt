@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -38,10 +40,14 @@ import com.example.myapplication.views.stratagem_list.StratagemListViewModel
 import com.example.myapplication.views.stratagem_list.StratagemListViewModelFactory
 import com.example.myapplication.domain.repository.StratagemRepository
 import com.example.myapplication.utils.UiEvent
+import com.example.myapplication.views.settings.SettingsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navigation(stratagemRepository: StratagemRepository) {
+fun Navigation(
+    stratagemRepository: StratagemRepository,
+    settingsStore: DataStore<Preferences>,
+) {
     val stratagemListViewModel: StratagemListViewModel = viewModel(
         factory = StratagemListViewModelFactory(stratagemRepository)
     )
@@ -96,66 +102,82 @@ fun Navigation(stratagemRepository: StratagemRepository) {
             )
         },
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.StartScreen.route,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(route = Screen.StartScreen.route) {
-                StartScreen(
-                    onNext = { navController.navigate(Screen.StratagemListScreen.route,) },
-                    modifier = Modifier,
-                )
-            }
+        AppContent(settingsStore) {
+            NavHost(
+                navController = navController,
+                startDestination = Screen.StartScreen.route,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(route = Screen.StartScreen.route) {
+                    StartScreen(
+                        onNext = { navController.navigate(Screen.StratagemListScreen.route,) },
+                        modifier = Modifier,
+                    )
+                }
+                composable(route = Screen.settingsScreen.route) {
+                    SettingsScreen(
+                        dataStore = settingsStore,
+//                        onBack = { navController.popBackStack() },
+//                        updateTopBar = { title, actions ->
+//                            topBarTitle = title
+//                            topBarActions = actions
+//                        }
+                    )
 
-            composable(route = Screen.StratagemListScreen.route) {
-                StratagemListScreen(
-                    viewModel = stratagemListViewModel,
-                    onStratagemClick = { stratagem ->
-                        navController.navigate(
-                            Screen.stratagemScreen.route.replace("{id}", stratagem.id.toString())
-                        )
-                    },
-                    onAddStratagemClick = {
-                        navController.navigate(Screen.stratagemScreen.route)
-                    },
-                    updateTopBar = { title, actions ->
-                        topBarTitle = title
-                        topBarActions = actions
-                    }
-                )
-            }
-
-            composable(
-                route = Screen.stratagemScreen.route,
-                arguments = listOf(navArgument("id") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val id = backStackEntry.arguments?.getString("id")
-
-                val stratagemViewModel =
-                    remember { StratagemViewModel(stratagemRepository, id?.toIntOrNull()) }
-                val state by stratagemViewModel.state.collectAsStateWithLifecycle()
-
-                LaunchedEffect(key1 = true) {
-                    stratagemViewModel.event.collect { event ->
-                        when (event) {
-                            is UiEvent.NavigateBack -> {
-                                navController.popBackStack()
-                            }
-
-                            else -> Unit
-                        }
-                    }
                 }
 
-                StratagemScreen(
-                    state = state,
-                    onEvent = stratagemViewModel::onEvent,
-                    updateTopBar = { title, actions ->
-                        topBarTitle = title
-                        topBarActions = actions
+                composable(route = Screen.StratagemListScreen.route) {
+                    StratagemListScreen(
+                        viewModel = stratagemListViewModel,
+                        onStratagemClick = { stratagem ->
+                            navController.navigate(
+                                Screen.stratagemScreen.route.replace("{id}", stratagem.id.toString())
+                            )
+                        },
+                        onAddStratagemClick = {
+                            navController.navigate(Screen.stratagemScreen.route)
+                        },
+                        onSettingsClick = {
+                            navController.navigate(Screen.settingsScreen.route)
+                        },
+                        updateTopBar = { title, actions ->
+                            topBarTitle = title
+                            topBarActions = actions
+                        }
+                    )
+                }
+
+                composable(
+                    route = Screen.stratagemScreen.route,
+                    arguments = listOf(navArgument("id") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val id = backStackEntry.arguments?.getString("id")
+
+                    val stratagemViewModel =
+                        remember { StratagemViewModel(stratagemRepository, id?.toIntOrNull()) }
+                    val state by stratagemViewModel.state.collectAsStateWithLifecycle()
+
+                    LaunchedEffect(key1 = true) {
+                        stratagemViewModel.event.collect { event ->
+                            when (event) {
+                                is UiEvent.NavigateBack -> {
+                                    navController.popBackStack()
+                                }
+
+                                else -> Unit
+                            }
+                        }
                     }
-                )
+
+                    StratagemScreen(
+                        state = state,
+                        onEvent = stratagemViewModel::onEvent,
+                        updateTopBar = { title, actions ->
+                            topBarTitle = title
+                            topBarActions = actions
+                        }
+                    )
+                }
             }
         }
     }
