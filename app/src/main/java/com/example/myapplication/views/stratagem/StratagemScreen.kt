@@ -1,18 +1,22 @@
 package com.example.myapplication.views.stratagem
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -36,9 +40,7 @@ fun StratagemScreen(
     onEvent: (StratagemEvent) -> Unit,
     updateTopBar: (String, @Composable () -> Unit) -> Unit
 ) {
-    updateTopBar(
-        "New stratagem"
-    ) {
+    updateTopBar("New stratagem") {
         if (state.id != null) {
             IconButton(onClick = { onEvent(StratagemEvent.DeleteStratagem) }) {
                 Icon(
@@ -52,28 +54,65 @@ fun StratagemScreen(
 
     val resourceId = BitmapUtils.getResourceId(LocalContext.current, state.name)
 
-    Column(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 15.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 20.dp, vertical = 15.dp)
     ) {
-        Icon(
-            painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.eagle_500kg_bomb),
-            contentDescription = "Helldivers Icon",
-            tint = Color.Unspecified,
-            modifier = Modifier.size(100.dp)
-        )
+        val isLandscape = maxWidth > maxHeight
 
-        Spacer(modifier = Modifier.height(10.dp))
+        if (isLandscape) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
+                    contentDescription = "Helldivers Icon",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .align(Alignment.CenterVertically)
+                )
 
+                FormFields(state, onEvent)
+            }
+        } else {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
+                    contentDescription = "Helldivers Icon",
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(100.dp)
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                FormFields(state, onEvent)
+            }
+        }
+    }
+}
+
+@Composable
+fun FormFields(state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
         StratagemTextField("Name", state.name) { onEvent(StratagemEvent.UpdateField("name", it)) }
         StratagemTextField("Codename", state.codename) { onEvent(StratagemEvent.UpdateField("codename", it)) }
         StratagemTextField("Uses", state.uses) { onEvent(StratagemEvent.UpdateField("uses", it)) }
         StratagemTextField("Cooldown", state.cooldown.toString()) { onEvent(StratagemEvent.UpdateField("cooldown", it)) }
         StratagemTextField("Activation", state.activation.toString()) { onEvent(StratagemEvent.UpdateField("activation", it)) }
 
-        if (state.id !== null) {
+        if (state.id != null) {
             StratagemTextField("Group ID", state.groupId.toString()) { onEvent(StratagemEvent.UpdateField("groupId", it)) }
             StratagemTextField("Image URL", state.imageUrl) { onEvent(StratagemEvent.UpdateField("imageUrl", it)) }
         }
@@ -83,7 +122,7 @@ fun StratagemScreen(
         Button(
             onClick = { onEvent(StratagemEvent.Save) },
             modifier = Modifier
-                .fillMaxWidth(0.5f)
+                .fillMaxWidth()
                 .height(50.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow, contentColor = Color.Black),
             shape = RoundedCornerShape(8.dp),
