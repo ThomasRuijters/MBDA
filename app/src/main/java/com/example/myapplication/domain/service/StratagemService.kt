@@ -26,6 +26,10 @@ class StratagemService : Service() {
         super.onCreate()
 
         stratagemFileStore = StratagemFileStore(this)
+        tryLoadStratagems()
+    }
+
+    private fun tryLoadStratagems() {
         stratagems = try {
             stratagemFileStore.loadStratagems()
         } catch (e: Exception) {
@@ -48,8 +52,12 @@ class StratagemService : Service() {
 
     private fun start() {
         isRunning = true
+        notification(R.drawable.hellbomb)
+
         CoroutineScope(Dispatchers.Default).launch {
             stratagemFlow().collect { stratagemResourceId ->
+                Log.d("StratagemFlow", "Collected resourceId: $stratagemResourceId")
+
                 stratagemFileStore.saveResourceId(stratagemResourceId)
 
                 withContext(Dispatchers.Main) {
@@ -68,6 +76,8 @@ class StratagemService : Service() {
                 val resourceId = BitmapUtils.getResourceId(this@StratagemService, stratagem.name)
 
                 emit(resourceId)
+            } else {
+                tryLoadStratagems()
             }
 
             delay(30_000)
