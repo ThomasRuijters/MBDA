@@ -56,7 +56,6 @@ class StratagemService : Service() {
 
         CoroutineScope(Dispatchers.Default).launch {
             stratagemFlow().collect { stratagemResourceId ->
-                Log.d("StratagemFlow", "Collected resourceId: $stratagemResourceId")
 
                 stratagemFileStore.saveResourceId(stratagemResourceId)
 

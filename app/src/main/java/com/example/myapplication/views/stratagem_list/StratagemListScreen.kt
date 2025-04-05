@@ -46,19 +46,19 @@ fun StratagemListScreen(
     updateTopBar: (String, @Composable () -> Unit) -> Unit
 ) {
     updateTopBar(
-        "Stratagems"
+        stringResource(R.string.stratagem_screen_title)
     ) {
         IconButton(onClick = onAddStratagemClick) {
             Icon(
                 imageVector = Icons.Rounded.Add,
-                contentDescription = "Add",
+                contentDescription = stringResource(R.string.stratagem_screen_create_button_description),
                 tint = Color.Yellow
             )
         }
         IconButton(onClick = onSettingsClick) {
             Icon(
                 imageVector = Icons.Rounded.Settings,
-                contentDescription = "Settings",
+                contentDescription = stringResource(R.string.settings_title),
                 tint = Color.Red
             )
         }
