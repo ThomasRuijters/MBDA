@@ -9,5 +9,6 @@ val Context.settingsDataStore by preferencesDataStore(name = "settings")
 
 object SettingsKeys {
     val DARK_MODE = booleanPreferencesKey("dark_mode")
-    val WELCOME_MESSAGE = stringPreferencesKey("language")
+    val USER_NAME = stringPreferencesKey("user_name")
+    val PROFILE_PICTURE_PATH = stringPreferencesKey("profile_picture")
 }

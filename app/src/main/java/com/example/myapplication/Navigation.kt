@@ -32,7 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.myapplication.views.StartScreen
+import com.example.myapplication.views.start.StartScreen
 import com.example.myapplication.views.stratagem.StratagemScreen
 import com.example.myapplication.views.stratagem.StratagemViewModel
 import com.example.myapplication.views.stratagem_list.StratagemListScreen
@@ -115,15 +115,7 @@ fun Navigation(
                     )
                 }
                 composable(route = Screen.settingsScreen.route) {
-                    SettingsScreen(
-                        dataStore = settingsStore,
-//                        onBack = { navController.popBackStack() },
-//                        updateTopBar = { title, actions ->
-//                            topBarTitle = title
-//                            topBarActions = actions
-//                        }
-                    )
-
+                    SettingsScreen()
                 }
 
                 composable(route = Screen.StratagemListScreen.route) {
