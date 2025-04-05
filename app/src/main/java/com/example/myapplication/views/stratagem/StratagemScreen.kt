@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
+import com.example.myapplication.utils.BitmapUtils
 
 @Composable
 fun StratagemScreen(
@@ -49,17 +50,7 @@ fun StratagemScreen(
         }
     }
 
-    val context = LocalContext.current
-    val formattedName = state.name
-        .lowercase()
-        .replace(" ", "_")
-        .replace("-", "_")
-        .replace("\"", "")
-    val resourceId: Int = try {
-        context.resources.getIdentifier(formattedName, "drawable", context.packageName)
-    } catch (e: Exception) {
-        0
-    }
+    val resourceId = BitmapUtils.getResourceId(LocalContext.current, state.name)
 
     Column(
         modifier = Modifier

@@ -12,6 +12,7 @@ import java.io.IOException
 
 class StratagemFileStore(private val context: Context) {
     private val fileName = "stratagems.json"
+    private val resourceIdFileName = "resource_id.json"
 
     fun saveStratagems(stratagems: List<Stratagem>) {
         try {
@@ -81,5 +82,39 @@ class StratagemFileStore(private val context: Context) {
         }
 
         return stratagems
+    }
+
+    fun saveResourceId(resourceId: Int) {
+        try {
+            val jsonObject = JSONObject().apply {
+                put("resource_id", resourceId)
+            }
+
+            val file = File(context.filesDir, resourceIdFileName)
+            val fos = FileOutputStream(file)
+            fos.write(jsonObject.toString().toByteArray())
+            fos.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun loadResourceId(): Int {
+        try {
+            val file = File(context.filesDir, resourceIdFileName)
+
+            if (file.exists()) {
+                val fis = FileInputStream(file)
+                val json = fis.readBytes().toString(Charsets.UTF_8)
+                fis.close()
+
+                val jsonObject = JSONObject(json)
+                return jsonObject.getInt("resource_id")
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return 0
     }
 }
