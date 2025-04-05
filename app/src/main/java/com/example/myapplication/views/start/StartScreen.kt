@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import android.content.res.Configuration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import com.example.myapplication.views.settings.VerticalSettingsScreen
 
 @Composable
@@ -68,7 +69,7 @@ fun HorizontalStartScreen(
     ) {
         Image(
             painter = painterResource(id = imageResource),
-            contentDescription = "Main logo",
+            contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .sizeIn(
@@ -77,7 +78,7 @@ fun HorizontalStartScreen(
                 )
         )
 
-        Text("Helldiving from: $townName.", color = MaterialTheme.colorScheme.onSecondary)
+        Text("${stringResource(R.string.startscreen_helldiving_from)}: $townName.", color = MaterialTheme.colorScheme.onSecondary)
 
         Button(
             onClick = onNext,
@@ -90,7 +91,7 @@ fun HorizontalStartScreen(
                     vertical = 20.dp)
         ) {
             Text(
-                text = "We dive, $username",
+                text = "${stringResource(R.string.startscreen_proceed_button)}, $username",
                 color = MaterialTheme.colorScheme.onSecondary
             )
         }
@@ -118,7 +119,7 @@ fun VerticalStartScreen(
     ) {
         Image(
             painter = painterResource(id = imageResource),
-            contentDescription = "Main logo",
+            contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .sizeIn(
@@ -127,7 +128,7 @@ fun VerticalStartScreen(
                 )
         )
 
-        Text("Helldiving from: $townName.", color = MaterialTheme.colorScheme.primary)
+        Text("${stringResource(R.string.startscreen_helldiving_from)}: $townName.", color = MaterialTheme.colorScheme.primary)
 
         Spacer(modifier = Modifier.height(200.dp))
 
@@ -143,7 +144,7 @@ fun VerticalStartScreen(
                 .width(200.dp)
         ) {
             Text(
-                text = "We dive, $username",
+                text = "${stringResource(R.string.startscreen_proceed_button)}, $username",
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }

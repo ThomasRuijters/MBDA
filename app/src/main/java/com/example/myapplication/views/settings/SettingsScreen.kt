@@ -33,9 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapplication.R
 
 @Composable
 fun SettingsScreen(
@@ -82,14 +84,14 @@ fun HorizontalSettingsScreen(viewModel: SettingsViewModel) {
                 modifier = Modifier.padding(bottom = 24.dp)
             ) {
                 Text(
-                    "User Info",
+                    stringResource(R.string.settings_group_userinfo),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 OutlinedTextField(
                     value = userName,
                     onValueChange = { viewModel.updateUserName(it) },
-                    label = { Text("Name") },
+                    label = { Text(stringResource(R.string.settings_group_userinfo_user_name)) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -98,12 +100,12 @@ fun HorizontalSettingsScreen(viewModel: SettingsViewModel) {
                 modifier = Modifier.padding(bottom = 24.dp)
             ) {
                 Text(
-                    "Appearance",
+                    stringResource(R.string.settings_group_appearance),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Dark mode")
+                    Text(stringResource(R.string.settings_group_appearance_dark_mode))
                     Switch(
                         checked = darkMode,
                         onCheckedChange = { viewModel.updateDarkMode(it) },
@@ -132,26 +134,26 @@ fun VerticalSettingsScreen(viewModel: SettingsViewModel) {
 
         Column(modifier = Modifier.padding(bottom = 24.dp)) {
             Text(
-                "User Info",
+                stringResource(R.string.settings_group_userinfo),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             OutlinedTextField(
                 value = userName,
                 onValueChange = { viewModel.updateUserName(it) },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.settings_group_userinfo_user_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
 
         Column(modifier = Modifier.padding(bottom = 24.dp)) {
             Text(
-                "Appearance",
+                stringResource(R.string.settings_group_appearance),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Dark mode")
+                Text(stringResource(R.string.settings_group_appearance_dark_mode))
                 Switch(
                     checked = darkMode,
                     onCheckedChange = { viewModel.updateDarkMode(it) },
@@ -172,7 +174,7 @@ fun SetProfilePicture(viewModel: SettingsViewModel) {
     ProfilePicture(profilePicture)
 
     Button(onClick = { pickImageLauncher.launch("image/*") }) {
-        Text("Select Profile Picture")
+        Text(stringResource(R.string.settings_select_profile_picture_button))
     }
 }
 
@@ -182,7 +184,9 @@ fun SettingsScreenPreview() {
     MaterialTheme {
         SettingsScreen(
             viewModel = viewModel(),
-            updateTopBar = { title, actions -> }
+            updateTopBar = { title, actions ->
+
+            }
         )
     }
 }

@@ -4,4 +4,51 @@
     <string name="placeholder_result">Placeholder result text</string>
     <string name="retry">Retry</string>
     <string name="loading">Loading</string>
+
+    <!--  Notification  -->
+    <string name="stratagem_notification_title">Active Stratagem</string>
+
+    <!--  Widget  -->
+    <string name="stratagem_widget_image_description">Stratagem ICon</string>
+
+
+    <!--  Navigation  -->
+    <string name="navigation_navigate_back_description">Stratagem ICon</string>
+
+    <!--  Top bar  -->
+    <string name="top_bar_title">Stratagems</string>
+
+    <!--  Start screen  -->
+    <string name="startscreen_helldiving_from">Helldiving from</string>
+    <string name="startscreen_proceed_button">We dive</string>
+
+    <!--  Stratagem screen  -->
+    <string name="stratagem_screen_title">Stratagems</string>
+    <string name="stratagem_screen_helldivers_icon_description">Helldivers Icon</string>
+    <string name="stratagem_screen_create_button">Create</string>
+    <string name="stratagem_screen_create_button_description">Create Stratagem</string>
+    <string name="stratagem_screen_edit_button">Edit Stratagem</string>
+    <string name="stratagem_screen_delete_button_description">Delete stratagem</string>
+
+    <!--  Stratagem form  -->
+    <string name="strategem_form_name">Name</string>
+    <string name="strategem_form_codename">Codename</string>
+    <string name="strategem_form_uses">Uses</string>
+    <string name="strategem_form_cooldown">Cooldown</string>
+    <string name="strategem_form_activation">Activation</string>
+    <string name="strategem_form_group_id">Group ID</string>
+    <string name="strategem_form_image_url">Image URL</string>
+    <string name="strategem_form_save">SAVE</string>
+
+
+    <!--  Settings  -->
+    <string name="settings_title">Settings</string>
+    <string name="profile_picture_description">Profile Picture</string>
+    <string name="no_image">No Image was selected</string>
+    <string name="settings_group_userinfo">User Info</string>
+    <string name="settings_group_userinfo_user_name">Name</string>
+    <string name="settings_group_appearance">Appearance</string>
+    <string name="settings_group_appearance_dark_mode">Dark mode</string>
+
+    <string name="settings_select_profile_picture_button">Select Profile Picture</string>
 </resources>

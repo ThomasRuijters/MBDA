@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,12 +46,17 @@ fun StratagemScreen(
     onEvent: (StratagemEvent) -> Unit,
     updateTopBar: (String, @Composable () -> Unit) -> Unit
 ) {
-    updateTopBar(if (state.id != null) "Edit stratagem" else "New stratagem") {
+    updateTopBar(
+        if (state.id != null)
+            stringResource(R.string.stratagem_screen_edit_button)
+        else
+            stringResource(R.string.stratagem_screen_create_button)
+    ) {
         if (state.id != null) {
             IconButton(onClick = { onEvent(StratagemEvent.DeleteStratagem) }) {
                 Icon(
                     imageVector = Icons.Rounded.Delete,
-                    contentDescription = "delete",
+                    contentDescription = stringResource(R.string.stratagem_screen_delete_button_description),
                     tint = MaterialTheme.colorScheme.tertiary,
                 )
             }
@@ -74,14 +80,18 @@ fun StratagemScreen(
 }
 
 @Composable
-fun VerticalStratagemScreen(resourceId: Int, state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
+fun VerticalStratagemScreen(
+    resourceId: Int,
+    state: StratagemState,
+    onEvent: (StratagemEvent) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
-            contentDescription = "Helldivers Icon",
+            contentDescription = stringResource(R.string.stratagem_screen_helldivers_icon_description),
             tint = Color.Unspecified,
             modifier = Modifier.size(100.dp).background(Color.Black)
         )
@@ -93,7 +103,11 @@ fun VerticalStratagemScreen(resourceId: Int, state: StratagemState, onEvent: (St
 }
 
 @Composable
-fun HorizontalStratagemScreen(resourceId: Int, state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
+fun HorizontalStratagemScreen(
+    resourceId: Int,
+    state: StratagemState,
+    onEvent: (StratagemEvent) -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxSize(),
         verticalAlignment = Alignment.Top,
@@ -101,7 +115,7 @@ fun HorizontalStratagemScreen(resourceId: Int, state: StratagemState, onEvent: (
     ) {
         Icon(
             painter = painterResource(id = if (resourceId != 0) resourceId else R.drawable.helldivers_2__icon_),
-            contentDescription = "Helldivers Icon",
+            contentDescription = stringResource(R.string.stratagem_screen_helldivers_icon_description),
             tint = Color.Unspecified,
             modifier = Modifier
                 .size(150.dp)
@@ -121,15 +135,32 @@ fun FormFields(state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        StratagemTextField("Name", state.name) { onEvent(StratagemEvent.UpdateField("name", it)) }
-        StratagemTextField("Codename", state.codename) { onEvent(StratagemEvent.UpdateField("codename", it)) }
-        StratagemTextField("Uses", state.uses) { onEvent(StratagemEvent.UpdateField("uses", it)) }
-        StratagemTextField("Cooldown", state.cooldown.toString()) { onEvent(StratagemEvent.UpdateField("cooldown", it)) }
-        StratagemTextField("Activation", state.activation.toString()) { onEvent(StratagemEvent.UpdateField("activation", it)) }
+        StratagemTextField(stringResource(R.string.strategem_form_name), state.name) {
+            onEvent(StratagemEvent.UpdateField("name", it)) }
+        StratagemTextField(
+            stringResource(R.string.strategem_form_codename),
+            state.codename
+        ) { onEvent(StratagemEvent.UpdateField("codename", it)) }
+        StratagemTextField(stringResource(R.string.strategem_form_uses), state.uses)
+        { onEvent(StratagemEvent.UpdateField("uses", it)) }
+        StratagemTextField(
+            stringResource(R.string.strategem_form_cooldown),
+            state.cooldown.toString()
+        ) { onEvent(StratagemEvent.UpdateField("cooldown", it)) }
+        StratagemTextField(
+            stringResource(R.string.strategem_form_activation),
+            state.activation.toString()
+        ) { onEvent(StratagemEvent.UpdateField("activation", it)) }
 
         if (state.id != null) {
-            StratagemTextField("Group ID", state.groupId.toString()) { onEvent(StratagemEvent.UpdateField("groupId", it)) }
-            StratagemTextField("Image URL", state.imageUrl) { onEvent(StratagemEvent.UpdateField("imageUrl", it)) }
+            StratagemTextField(
+                stringResource(R.string.strategem_form_group_id),
+                state.groupId.toString()
+            ) { onEvent(StratagemEvent.UpdateField("groupId", it)) }
+            StratagemTextField(
+                stringResource(R.string.strategem_form_image_url),
+                state.imageUrl
+            ) { onEvent(StratagemEvent.UpdateField("imageUrl", it)) }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -139,10 +170,13 @@ fun FormFields(state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
             shape = RoundedCornerShape(8.dp),
         ) {
-            Text("SAVE", fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.strategem_form_save), fontWeight = FontWeight.Bold)
         }
     }
 }

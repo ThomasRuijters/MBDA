@@ -68,10 +68,7 @@ class StratagemRepository(private val context: Context) {
         if (id == null) {
             return null
         }
-
         val stratagem = fileStore.loadStratagems().firstOrNull { it.id == id }
-
-        Log.d("StratagemViewModel", "Loaded stratagem: $stratagem")
         return stratagem
     }
 

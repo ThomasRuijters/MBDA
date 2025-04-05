@@ -22,7 +22,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.R
 import java.io.File
 
 @Composable
@@ -56,7 +58,7 @@ fun ProfilePicture(filePath: String) {
             bitmap?.let {
                 Image(
                     bitmap = it.asImageBitmap(),
-                    contentDescription = "Profile Picture",
+                    contentDescription = stringResource(R.string.profile_picture_description),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
@@ -67,7 +69,7 @@ fun ProfilePicture(filePath: String) {
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text("No Image", color = Color.White)
+                Text(stringResource(R.string.no_image), color = Color.White)
             }
         }
     }

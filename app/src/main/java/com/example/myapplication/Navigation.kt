@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -41,7 +42,6 @@ import com.example.myapplication.views.stratagem_list.StratagemListScreen
 import com.example.myapplication.views.stratagem_list.StratagemListViewModel
 import com.example.myapplication.views.stratagem_list.StratagemListViewModelFactory
 import com.example.myapplication.domain.repository.StratagemRepository
-import com.example.myapplication.ui.theme.AppContent
 import com.example.myapplication.utils.UiEvent
 import com.example.myapplication.views.settings.SettingsScreen
 
@@ -91,7 +91,7 @@ fun Navigation(
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
                                     imageVector = Icons.Rounded.ArrowBack,
-                                    contentDescription = "navigate back",
+                                    contentDescription = stringResource(R.string.navigation_navigate_back_description),
                                     tint = MaterialTheme.colorScheme.primary,
                                 )
                             }
