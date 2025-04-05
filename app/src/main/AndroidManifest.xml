@@ -34,6 +34,7 @@
         <service
             android:name=".domain.service.StratagemService"
             android:label="Stratagem service"
+            android:exported="false"
             android:foregroundServiceType="specialUse" />
 
         <receiver
