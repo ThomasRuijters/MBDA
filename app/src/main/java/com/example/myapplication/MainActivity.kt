@@ -11,18 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.myapplication.domain.repository.StratagemRepository
 import com.example.myapplication.domain.service.StratagemService
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import com.example.myapplication.utils.SettingsKeys
-import com.example.myapplication.utils.settingsDataStore
-import kotlinx.coroutines.flow.map
-
 import com.example.myapplication.utils.PermissionHelper
+import com.example.myapplication.utils.settingsDataStore
 
 class MainActivity : ComponentActivity() {
 

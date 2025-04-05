@@ -13,24 +13,3 @@ data class Stratagem(
     val createdAt: String,
     val updatedAt: String
 )
-
-//{
-//    "id": 1,
-//    "codename": "E/MG-101",
-//    "name": "HMG Emplacement",
-//    "keys": [
-//    "down",
-//    "up",
-//    "left",
-//    "right",
-//    "right",
-//    "left"
-//    ],
-//    "uses": "Unlimited",
-//    "cooldown": 180,
-//    "activation": 3,
-//    "imageUrl": "/1/1.svg",
-//    "groupId": 1,
-//    "createdAt": "2024-03-19T13:05:55.350Z",
-//    "updatedAt": "2024-03-19T13:05:55.350Z"
-//},

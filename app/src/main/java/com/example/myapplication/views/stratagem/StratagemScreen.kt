@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,7 +62,7 @@ fun StratagemScreen(
         }
     }
 
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE;
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val resourceId = BitmapUtils.getResourceId(LocalContext.current, state.name)
 
     Box(
@@ -135,30 +134,30 @@ fun FormFields(state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        StratagemTextField(stringResource(R.string.strategem_form_name), state.name) {
+        StratagemTextField(stringResource(R.string.stratagem_form_name), state.name) {
             onEvent(StratagemEvent.UpdateField("name", it)) }
         StratagemTextField(
-            stringResource(R.string.strategem_form_codename),
+            stringResource(R.string.stratagem_form_codename),
             state.codename
         ) { onEvent(StratagemEvent.UpdateField("codename", it)) }
-        StratagemTextField(stringResource(R.string.strategem_form_uses), state.uses)
+        StratagemTextField(stringResource(R.string.stratagem_form_uses), state.uses)
         { onEvent(StratagemEvent.UpdateField("uses", it)) }
         StratagemTextField(
-            stringResource(R.string.strategem_form_cooldown),
+            stringResource(R.string.stratagem_form_cooldown),
             state.cooldown.toString()
         ) { onEvent(StratagemEvent.UpdateField("cooldown", it)) }
         StratagemTextField(
-            stringResource(R.string.strategem_form_activation),
+            stringResource(R.string.stratagem_form_activation),
             state.activation.toString()
         ) { onEvent(StratagemEvent.UpdateField("activation", it)) }
 
         if (state.id != null) {
             StratagemTextField(
-                stringResource(R.string.strategem_form_group_id),
+                stringResource(R.string.stratagem_form_group_id),
                 state.groupId.toString()
             ) { onEvent(StratagemEvent.UpdateField("groupId", it)) }
             StratagemTextField(
-                stringResource(R.string.strategem_form_image_url),
+                stringResource(R.string.stratagem_form_image_url),
                 state.imageUrl
             ) { onEvent(StratagemEvent.UpdateField("imageUrl", it)) }
         }
@@ -176,7 +175,7 @@ fun FormFields(state: StratagemState, onEvent: (StratagemEvent) -> Unit) {
             ),
             shape = RoundedCornerShape(8.dp),
         ) {
-            Text(stringResource(R.string.strategem_form_save), fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.stratagem_form_save), fontWeight = FontWeight.Bold)
         }
     }
 }

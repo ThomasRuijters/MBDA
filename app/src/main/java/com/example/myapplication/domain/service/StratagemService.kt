@@ -3,7 +3,6 @@ package com.example.myapplication.domain.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.glance.appwidget.updateAll
 import com.example.myapplication.R
@@ -11,9 +10,13 @@ import com.example.myapplication.domain.model.Stratagem
 import com.example.myapplication.persistence.StratagemFileStore
 import com.example.myapplication.utils.BitmapUtils
 import com.example.myapplication.widget.StratagemWidget
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class StratagemService : Service() {
 
@@ -56,7 +59,6 @@ class StratagemService : Service() {
 
         CoroutineScope(Dispatchers.Default).launch {
             stratagemFlow().collect { stratagemResourceId ->
-
                 stratagemFileStore.saveResourceId(stratagemResourceId)
 
                 withContext(Dispatchers.Main) {

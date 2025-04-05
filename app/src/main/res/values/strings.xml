@@ -31,14 +31,14 @@
     <string name="stratagem_screen_delete_button_description">Delete stratagem</string>
 
     <!--  Stratagem form  -->
-    <string name="strategem_form_name">Name</string>
-    <string name="strategem_form_codename">Codename</string>
-    <string name="strategem_form_uses">Uses</string>
-    <string name="strategem_form_cooldown">Cooldown</string>
-    <string name="strategem_form_activation">Activation</string>
-    <string name="strategem_form_group_id">Group ID</string>
-    <string name="strategem_form_image_url">Image URL</string>
-    <string name="strategem_form_save">SAVE</string>
+    <string name="stratagem_form_name">Name</string>
+    <string name="stratagem_form_codename">Codename</string>
+    <string name="stratagem_form_uses">Uses</string>
+    <string name="stratagem_form_cooldown">Cooldown</string>
+    <string name="stratagem_form_activation">Activation</string>
+    <string name="stratagem_form_group_id">Group ID</string>
+    <string name="stratagem_form_image_url">Image URL</string>
+    <string name="stratagem_form_save">SAVE</string>
 
 
     <!--  Settings  -->

@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class StratagemRepository(private val context: Context) {
+class StratagemRepository(val context: Context) {
     private val requestQueue = Volley.newRequestQueue(context)
     private val fileStore = StratagemFileStore(context)
 
@@ -69,6 +69,7 @@ class StratagemRepository(private val context: Context) {
             return null
         }
         val stratagem = fileStore.loadStratagems().firstOrNull { it.id == id }
+
         return stratagem
     }
 

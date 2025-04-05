@@ -21,7 +21,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private val dataStore = application.settingsDataStore
 
-    // Use MutableStateFlow to manually manage state
     private val _darkModeFlow = MutableStateFlow(AppSettings.DEFAULT.darkMode)
     val darkModeFlow: StateFlow<Boolean> = _darkModeFlow
 
@@ -32,7 +31,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val profilePictureUriFlow: StateFlow<String> = _profilePictureUriFlow
 
     init {
-        // Collecting data from DataStore and updating StateFlow manually
+
         viewModelScope.launch {
             dataStore.data
                 .map { prefs ->

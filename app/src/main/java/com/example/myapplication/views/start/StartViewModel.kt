@@ -56,7 +56,6 @@ class StartViewModel(application: Application) : AndroidViewModel(application) {
         if (_permissionGranted.value) {
             resolveTownName()
         } else {
-            // Handle case where permission is not granted
             _townName.value = "somewhere"
         }
     }

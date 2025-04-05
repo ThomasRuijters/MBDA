@@ -38,7 +38,7 @@ class StratagemFileStore(private val context: Context) {
             val file = File(context.filesDir, fileName)
             val fos = FileOutputStream(file)
             fos.write(jsonArray.toString().toByteArray())
-            fos.close();
+            fos.close()
         } catch (e: IOException) {
             e.printStackTrace()
         }

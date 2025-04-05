@@ -1,7 +1,6 @@
 package com.example.myapplication.widget
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.res.stringResource
@@ -22,9 +21,6 @@ import com.example.myapplication.persistence.StratagemFileStore
 class StratagemWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val resourceId = StratagemFileStore(context).loadResourceId()
-
-        // Log the loaded resource ID to ensure it's being updated correctly
-        Log.d("StratagemWidget", "Loaded resource ID: $resourceId")
 
         provideContent {
             MyContent(resourceId)

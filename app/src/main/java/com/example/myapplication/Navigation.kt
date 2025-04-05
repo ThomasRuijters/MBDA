@@ -1,11 +1,10 @@
 package com.example.myapplication
 
-import android.content.res.Resources.Theme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +40,7 @@ import com.example.myapplication.views.stratagem_list.StratagemListScreen
 import com.example.myapplication.views.stratagem_list.StratagemListViewModel
 import com.example.myapplication.views.stratagem_list.StratagemListViewModelFactory
 import com.example.myapplication.domain.repository.StratagemRepository
+import com.example.myapplication.ui.theme.AppContent
 import com.example.myapplication.utils.UiEvent
 import com.example.myapplication.views.settings.SettingsScreen
 
@@ -90,7 +89,7 @@ fun Navigation(
                         if (currentRoute != Screen.StartScreen.route && previousRoute != Screen.StartScreen.route) {
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
-                                    imageVector = Icons.Rounded.ArrowBack,
+                                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                                     contentDescription = stringResource(R.string.navigation_navigate_back_description),
                                     tint = MaterialTheme.colorScheme.primary,
                                 )
@@ -113,7 +112,7 @@ fun Navigation(
             ) {
                 composable(route = Screen.StartScreen.route) {
                     StartScreen(
-                        onNext = { navController.navigate(Screen.StratagemListScreen.route,) },
+                        onNext = { navController.navigate(Screen.StratagemListScreen.route) },
                         modifier = Modifier,
                     )
                 }
