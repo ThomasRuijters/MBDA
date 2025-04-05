@@ -115,7 +115,12 @@ fun Navigation(
                     )
                 }
                 composable(route = Screen.settingsScreen.route) {
-                    SettingsScreen()
+                    SettingsScreen(
+                        updateTopBar = { title, actions ->
+                            topBarTitle = title
+                            topBarActions = actions
+                        }
+                    )
                 }
 
                 composable(route = Screen.StratagemListScreen.route) {

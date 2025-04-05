@@ -1,6 +1,7 @@
 package com.example.myapplication.views.settings
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.AndroidViewModel
@@ -83,11 +84,40 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun updateProfileImageUri(uri: String) {
+    private fun updateProfileImageUri(path: String) {
         viewModelScope.launch {
-            dataStore.edit { prefs ->
-                prefs[SettingsKeys.PROFILE_PICTURE_PATH] = uri
+            dataStore.edit { prefs -> prefs[SettingsKeys.PROFILE_PICTURE_PATH] = path }
+        }
+    }
+
+    fun saveProfileImageFromUri(uri: Uri) {
+        viewModelScope.launch {
+            val context = getApplication<Application>().applicationContext
+
+            val localFile = saveUriToInternalStorage(context, uri)
+
+            localFile?.let {
+                updateProfileImageUri(it.absolutePath)
             }
+        }
+    }
+
+    private fun saveUriToInternalStorage(context: Context, uri: Uri): File? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val fileName = "profile_picture_${System.currentTimeMillis()}.jpg"
+            val file = File(context.filesDir, fileName)
+
+            inputStream?.use { input ->
+                FileOutputStream(file).use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 }

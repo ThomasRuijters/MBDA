@@ -8,11 +8,17 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -33,8 +39,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = viewModel()
+    viewModel: SettingsViewModel = viewModel(),
+    updateTopBar: (String, @Composable () -> Unit) -> Unit
 ) {
+    updateTopBar("Settings", {})
+
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) {
         HorizontalSettingsScreen(viewModel)
@@ -49,28 +58,60 @@ fun HorizontalSettingsScreen(viewModel: SettingsViewModel) {
     val darkMode by viewModel.darkModeFlow.collectAsState()
     val userName by viewModel.userNameFlow.collectAsState()
 
-    Column(modifier = Modifier.padding(50.dp)) {
-        Text("Settings", style = MaterialTheme.typography.headlineMedium)
-        Spacer(Modifier.height(24.dp))
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Dark mode?")
-            Switch(
-                checked = darkMode,
-                onCheckedChange = { viewModel.updateDarkMode(it) },
-                modifier = Modifier.padding(start = 12.dp)
-            )
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            SetProfilePicture(viewModel)
         }
 
-        Spacer(Modifier.height(24.dp))
+        Column(
+            modifier = Modifier
+                .weight(3f)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(
+                modifier = Modifier.padding(bottom = 24.dp)
+            ) {
+                Text(
+                    "User Info",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                OutlinedTextField(
+                    value = userName,
+                    onValueChange = { viewModel.updateUserName(it) },
+                    label = { Text("Name") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
-        OutlinedTextField(
-            value = userName,
-            onValueChange = {
-                viewModel.updateUserName(it)
-            },
-            label = { Text("Name") }
-        )
+            Column(
+                modifier = Modifier.padding(bottom = 24.dp)
+            ) {
+                Text(
+                    "Appearance",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Dark mode")
+                    Switch(
+                        checked = darkMode,
+                        onCheckedChange = { viewModel.updateDarkMode(it) },
+                        modifier = Modifier.padding(start = 12.dp)
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -79,50 +120,59 @@ fun VerticalSettingsScreen(viewModel: SettingsViewModel) {
 
     val darkMode by viewModel.darkModeFlow.collectAsState()
     val userName by viewModel.userNameFlow.collectAsState()
-    val profilePicture by viewModel.profilePictureUriFlow.collectAsState()
 
-    Column(modifier = Modifier.padding(24.dp)) {
-        Text("Settings", style = MaterialTheme.typography.headlineMedium)
+    Column(
+        modifier = Modifier
+            .padding(24.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        SetProfilePicture(viewModel)
+
         Spacer(Modifier.height(24.dp))
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Dark mode?")
-            Switch(
-                checked = darkMode,
-                onCheckedChange = { viewModel.updateDarkMode(it) },
-                modifier = Modifier.padding(start = 12.dp)
+        Column(modifier = Modifier.padding(bottom = 24.dp)) {
+            Text(
+                "User Info",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            OutlinedTextField(
+                value = userName,
+                onValueChange = { viewModel.updateUserName(it) },
+                label = { Text("Name") },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
-        Spacer(Modifier.height(24.dp)) // This could come from DataStore or SharedPreferences
-
-        val context = LocalContext.current
-        val pickImageLauncher =
-            rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                uri?.let { imageUri ->
-                    val inputStream = context.contentResolver.openInputStream(uri)
-                    inputStream?.use { stream ->
-                        // Convert the InputStream into a Bitmap
-                        MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-                    }
-
-                    // Handle the selected image URI (e.g., save to internal storage, or display it)
-                    viewModel.updateProfileImageUri(imageUri.toString())
-                }
+        Column(modifier = Modifier.padding(bottom = 24.dp)) {
+            Text(
+                "Appearance",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Dark mode")
+                Switch(
+                    checked = darkMode,
+                    onCheckedChange = { viewModel.updateDarkMode(it) },
+                    modifier = Modifier.padding(start = 12.dp)
+                )
             }
-        Text("Profile Picture: ${profilePicture ?: "No image selected"}")
-
-        Button(onClick = { pickImageLauncher.launch("image/*") }) {
-            Text("Select Profile Picture")
         }
+    }
+}
 
-        OutlinedTextField(
-            value = userName,
-            onValueChange = {
-                viewModel.updateUserName(it)
-            },
-            label = { Text("Name") }
-        )
+@Composable
+fun SetProfilePicture(viewModel: SettingsViewModel) {
+    val profilePicture by viewModel.profilePictureUriFlow.collectAsState()
+
+    val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { viewModel.saveProfileImageFromUri(it) }
+    }
+    ProfilePicture(profilePicture)
+
+    Button(onClick = { pickImageLauncher.launch("image/*") }) {
+        Text("Select Profile Picture")
     }
 }
 
@@ -130,6 +180,9 @@ fun VerticalSettingsScreen(viewModel: SettingsViewModel) {
 @Preview(showBackground = true)
 fun SettingsScreenPreview() {
     MaterialTheme {
-        SettingsScreen()
+        SettingsScreen(
+            viewModel = viewModel(),
+            updateTopBar = { title, actions -> }
+        )
     }
 }
