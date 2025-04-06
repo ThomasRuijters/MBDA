@@ -3,7 +3,6 @@ package com.example.myapplication.widget
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -14,7 +13,6 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.layout.Column
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
-import com.example.myapplication.R
 import com.example.myapplication.persistence.StratagemFileStore
 
 
