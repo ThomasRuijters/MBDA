@@ -35,7 +35,7 @@ class StratagemWidget : GlanceAppWidget() {
             ) {
                 Image(
                     provider = ImageProvider(resId = stratagemResourceId),
-                    contentDescription = stringResource(R.string.stratagem_widget_image_description),
+                    contentDescription = "Stratagem Icon",
                     modifier = GlanceModifier.fillMaxWidth()
                 )
             }
