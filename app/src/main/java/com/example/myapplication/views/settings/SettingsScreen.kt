@@ -1,5 +1,7 @@
 package com.example.myapplication.views.settings
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,9 +23,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -159,12 +163,24 @@ fun VerticalSettingsScreen(viewModel: SettingsViewModel) {
 fun SetProfilePicture(viewModel: SettingsViewModel) {
     val profilePicture by viewModel.profilePictureUriFlow.collectAsState()
 
-    val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let { viewModel.saveProfileImageFromUri(it) }
+    val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                viewModel.saveProfileImageFromUri(uri)
+            }
+        }
+    }
+
+    val intent = remember {
+        Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+        }
     }
     ProfilePicture(profilePicture)
 
-    Button(onClick = { pickImageLauncher.launch("image/*") }) {
+    Button(onClick = {
+        pickImageLauncher.launch(intent)
+    }) {
         Text(stringResource(R.string.settings_select_profile_picture_button))
     }
 }
